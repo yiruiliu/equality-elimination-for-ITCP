@@ -1,22 +1,35 @@
 linprogMax := function(obj,A,b,LB) ## max(obj*x) given Ax<= b, -x <= LB
-  local I, Anew, bnew, rlist;
-  I := IdentityMat(Length(LB));
+  local I, Anew, bnew, s, rlist;
+  I := IdentityMat(Size(LB));
   Anew := ShallowCopy(A);
   bnew := ShallowCopy(b);
   Append(Anew,-I);
   Append(bnew,-LB);
   rlist:=LoadQSLP([],Anew,bnew,[],qs_exec);
+  s:=rlist[1];
   LoadQSLPobj(s, obj);
   SolveQSLP(s,[]);
   rlist:=GetQSLPsol_primal(s);
-  return [rlist[5], rlist[3]]; # [max(obj*x), x] 
+  return [rlist[3],rlist[5]]; # [max(obj*x), x] 
 end;
 
 EqualityEliminationDetectfFullDim := function(A,b)
-  local f, Anew;
-  f = ZeroMutable([1..Size(A[1])]);
-  Append(f,1);
+  local f, Anew, acol, AnewT, arow,bnew, LB, XFVAL;
+  f := ZeroMutable([1..Size(A[1])]);
+  Append(f,[1]);
   Anew := ShallowCopy(A);
-  Append(Anew,[ZeroMutable([1..Size(A)]) + 1]);
-
+  acol := ZeroMutable([1..Size(A)]) + 1;
+  AnewT := TransposedMat(Anew);
+  AnewT := ShallowCopy(AnewT);
+  Append(AnewT,[acol]);
+  Anew := TransposedMat(AnewT);
+  Anew := ShallowCopy(Anew);
+  arow := ZeroMutable([1..Size(A[1])]);
+  Append(arow,[1]);
+  Append(Anew,[arow]);
+  bnew := ShallowCopy(b);
+  Append(bnew,[1]);
+  LB := ZeroMutable([1..Size(A[1])]);
+  XFVAL := linprogMax(f,Anew,bnew,LB);
+  return[XFVAL[1],XFVAL[2]];
 end;
