@@ -1,11 +1,22 @@
 linprogMax := function(obj,A,b,LB) ## max(obj*x) given Ax<= b, -x <= LB
-  local I, rlist;
+  local I, Anew, bnew, rlist;
   I := IdentityMat(Length(LB));
-  Append(A,-I);
-  Append(b,-LB);
-  rlist:=LoadQSLP([],A,b,[],qs_exec);
+  Anew := ShallowCopy(A);
+  bnew := ShallowCopy(b);
+  Append(Anew,-I);
+  Append(bnew,-LB);
+  rlist:=LoadQSLP([],Anew,bnew,[],qs_exec);
   LoadQSLPobj(s, obj);
   SolveQSLP(s,[]);
   rlist:=GetQSLPsol_primal(s);
   return [rlist[5], rlist[3]]; # [max(obj*x), x] 
+end;
+
+EqualityEliminationDetectfFullDim := function(A,b)
+  local f, Anew;
+  f = ZeroMutable([1..Size(A[1])]);
+  Append(f,1);
+  Anew := ShallowCopy(A);
+  Append(Anew,[ZeroMutable([1..Size(A)]) + 1]);
+
 end;
