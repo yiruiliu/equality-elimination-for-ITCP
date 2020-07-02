@@ -1,0 +1,11 @@
+linprogMax := function(obj,A,b,LB) ## max(obj*x) given Ax<= b, -x <= LB
+  local I, rlist;
+  I := IdentityMat(Length(LB));
+  Append(A,-I);
+  Append(b,-LB);
+  rlist:=LoadQSLP([],A,b,[],qs_exec);
+  LoadQSLPobj(s, obj);
+  SolveQSLP(s,[]);
+  rlist:=GetQSLPsol_primal(s);
+  return [rlist[5], rlist[3]]; # [max(obj*x), x] 
+end;
