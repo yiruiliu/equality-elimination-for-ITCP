@@ -35,7 +35,7 @@ end;
 EqualityEliminationEE := function(E, A)
 #eliminate bounded variables Dx'=c from Bx<=b
 #where E=[D|-c],A=[B|-b]
-  local AA, R, RT, i, col, row, rr, Aa, j, k, c;
+  local AA, R, RT, jb, i, col, row, rr, Aa, j, k, c;
   AA := ShallowCopy(A);
   R := RREF(E);
   RT := TranspoedMat(R);
