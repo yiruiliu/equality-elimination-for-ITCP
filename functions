@@ -35,7 +35,7 @@ end;
 EqualityEliminationEE := function(E, A)
 #eliminate bounded variables Dx'=c from Bx<=b
 #where E=[D|-c],A=[B|-b]
-  local AA, R, RT, i, col, row;
+  local AA, R, RT, i, col, row, rr, Aa, j, k, c;
   AA := ShallowCopy(A);
   R := RREF(E);
   RT := TranspoedMat(R);
@@ -49,6 +49,20 @@ EqualityEliminationEE := function(E, A)
   for i in [1..Size(jb)] do
     row := R[i];
     row[jb[i]] := 0;
-    
+    rr = Difference([1..Size(row)], Positions(row,0));
+    Aa := NullMat(Size(AA),Size(AA[1]));
+    for j in [1..Size(rr)] do
+      for k in [1..Size(c)] do
+        c := AA[k,jb[i]] * -row[rr[j]];
+        Aa[k, rr[j]] = c;
+      od;
+    od;
+    AA = AA + Aa;
   od;
+  for k in [1..Size(AA)] do
+    for j in [1..Size(jb)] do
+      AA[k, jb[j]] := 0;
+    od;
+  od;
+  return AA;
 end;
