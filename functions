@@ -88,3 +88,27 @@ EqualityEliminationDual := function(A, b)
   return [XFVAL[1],XFVAL[2]];
 end;
 
+Permute_matrix_parallel:=function(B,A) #subfunction
+# sort columns of matrix B in parallel with indices A
+	local Bt,Bf,A1;
+	Bt:=TransposedMat(B);
+	Bt:=ShallowCopy(Bt);
+	A1:=ShallowCopy(A);
+	SortParallel(A1,Bt);
+	Bf:=TransposedMat(Bt);
+	return [Bf,A1];
+end;
+
+Permute_marginalAndJoin:=function(ncinstance) #subfunction
+####example ncinstance:=[[[3,6]],3,6]; permute column indices of A such that the first 7 indices are [1],..[6],[3,6]
+	local A,numofVar,i;
+	numofVar:=ncinstance[3];
+	A:=[set2int([numofVar])+2^numofVar..set2int([numofVar])+2^(numofVar+1)-2];
+	for i in [1..numofVar] do
+		A[set2int([i])]:=set2int([i]);
+	od;
+	for i in [1..Size(ncinstance[1])] do
+		A[set2int(ncinstance[1][i])]:=set2int([numofVar])+set2int(ncinstance[1][i]);
+	od;
+	return A;
+end;
