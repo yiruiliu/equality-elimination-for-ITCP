@@ -1,106 +1,107 @@
 linprogMax := function(obj,A,b,linrows) ## max(obj*x) given Ax<= b, linrows denotes equality constraints, 
-  local  s, rlist;
-  rlist:=LoadQSLP([],A,b,[],qs_exec);
-  s:=rlist[1];
-  LoadQSLPobj(s, obj);
-  SolveQSLP(s,[]);
-  rlist:=GetQSLPsol_primal(s);
-  return [rlist[3],rlist[5]]; # [max(obj*x), x] 
+	local  s, rlist;
+	rlist:=LoadQSLP([],A,b,[],qs_exec);
+	s:=rlist[1];
+	LoadQSLPobj(s, obj);
+	SolveQSLP(s,[]);
+	rlist:=GetQSLPsol_primal(s);
+	return [rlist[3],rlist[5]]; # [max(obj*x), x] 
 end;
 
 EqualityEliminationDetectfFullDim := function(A,b)
-  local f, Anew, acol, AnewT, arow,bnew, LB, I, XFVAL;
-  f := ZeroMutable([1..Size(A[1])]);
-  Append(f,[1]);
-  Anew := ShallowCopy(A);
-  acol := ZeroMutable([1..Size(A)]) + 1;
-  AnewT := TransposedMat(Anew);
-  AnewT := ShallowCopy(AnewT);
-  Append(AnewT,[acol]);
-  Anew := TransposedMat(AnewT);
-  Anew := ShallowCopy(Anew);
-  arow := ZeroMutable([1..Size(A[1])]);
-  Append(arow,[1]);
-  Append(Anew,[arow]);
-  bnew := ShallowCopy(b);
-  Append(bnew,[1]);
-  LB := ZeroMutable([1..Size(A[1])]);
-  Append(bnew,LB);
-  I := -IdentityMat(Size(Anew[1])){[1..Size(Anew[1]) - 1]};
-  Append(Anew, I);
-  XFVAL := linprogMax(f,Anew,bnew,[]);
-  return[XFVAL[1],XFVAL[2]];
+	local f, Anew, acol, AnewT, arow,bnew, LB, I, XFVAL;
+	f := ZeroMutable([1..Size(A[1])]);
+	Append(f,[1]);
+	Anew := ShallowCopy(A);
+	acol := ZeroMutable([1..Size(A)]) + 1;
+	AnewT := TransposedMat(Anew);
+	AnewT := ShallowCopy(AnewT);
+	Append(AnewT,[acol]);
+	Anew := TransposedMat(AnewT);
+	Anew := ShallowCopy(Anew);
+	arow := ZeroMutable([1..Size(A[1])]);
+	Append(arow,[1]);
+	Append(Anew,[arow]);
+	bnew := ShallowCopy(b);
+	Append(bnew,[1]);
+	LB := ZeroMutable([1..Size(A[1])]);
+	Append(bnew,LB);
+	I := -IdentityMat(Size(Anew[1])){[1..Size(Anew[1]) - 1]};
+	Append(Anew, I);
+	XFVAL := linprogMax(f,Anew,bnew,[]);
+	return[XFVAL[1],XFVAL[2]];
 end;
 
 EqualityEliminationEE := function(E1, A)
 #eliminate bounded variables Dx'=c from Bx<=b
 #where E=[D|-c],A=[B|-b]
-  local AA, R, RT, jb, i, col, row, rr, Aa, j, k, c;
-  AA := ShallowCopy(A);
-  R := RREF(E1);
-  RT := TransposedMat(R);
-  jb := [];
-  for i in [1..Size(RT)] do
-    col := RT[i];
-    if Maximum(col) = 1 then
-      Append(jb,[i]);
-    fi;
-  od;
-  for i in [1..Size(jb)] do
-    row := R[i];
-    row[jb[i]] := 0;
-    rr := Difference([1..Size(row)], Positions(row,0));
-    Aa := NullMat(Size(AA),Size(AA[1]));
-    for j in [1..Size(rr)] do
-      for k in [1..Size(AA)] do
-        c := AA[k][jb[i]] * -row[rr[j]];
-        Aa[k][rr[j]] := c;
-      od;
-    od;
-    AA := AA + Aa;
-  od;
-  for k in [1..Size(AA)] do
-    for j in [1..Size(jb)] do
-      AA[k][jb[j]] := 0;
-    od;
-  od;
-  return AA;
+	local AA, R, RT, jb, i, col, row, rr, Aa, j, k, c;
+	AA := ShallowCopy(A);
+	R := RREF(E1);
+	RT := TransposedMat(R);
+	jb := [];
+	for i in [1..Size(RT)] do
+		col := RT[i];
+		if Maximum(col) = 1 then
+			Append(jb,[i]);
+		fi;
+	od;
+	for i in [1..Size(jb)] do
+		row := R[i];
+		row[jb[i]] := 0;
+		rr := Difference([1..Size(row)], Positions(row,0));
+		Aa := NullMat(Size(AA),Size(AA[1]));
+		for j in [1..Size(rr)] do
+			for k in [1..Size(AA)] do
+				c := AA[k][jb[i]] * -row[rr[j]];
+				Aa[k][rr[j]] := c;
+			od;
+		od;
+		AA := AA + Aa;
+	od;
+	for k in [1..Size(AA)] do
+		for j in [1..Size(jb)] do
+			AA[k][jb[j]] := 0;
+		od;
+	od;
+	return AA;
 end;
 
 EqualityEliminationDual := function(A, b)
-  local zcol, AA, Aprime, aa, bprime, LB, linrows, f, XFVAL;
-  zcol := Zero([1..Size(A[1])]);
-  AA := ShallowCopy(A);
-  Append(AA,[zcol]);
-  Aprime := TransposedMat(AA);
-  aa := Zero([1..Size(Aprime[1])]) + 1;
-  Aprime := ShallowCopy(Aprime);
-  Append(Aprime,[aa]);
-  bprime := ZeroMutable([1..Size(Aprime)]);
-  bprime[Size(bprime)] := 1;
-  linrows := [1..Size(bprime)];
-  LB := -IdentityMat(Size(Aprime[1]));
-  Append(Aprime,LB);
-  Append(bprime,Zero([1..Size(LB)]));
-  f := ShallowCopy(b);
-  Append(f,[1]);
-  XFVAL := linprogMax(-f,Aprime,bprime,linrows);
-  return [XFVAL[1],XFVAL[2]];
+	local zcol, AA, Aprime, aa, bprime, LB, linrows, f, XFVAL;
+	zcol := Zero([1..Size(A[1])]);
+	AA := ShallowCopy(A);
+	Append(AA,[zcol]);
+	Aprime := TransposedMat(AA);
+	aa := Zero([1..Size(Aprime[1])]) + 1;
+	Aprime := ShallowCopy(Aprime);
+	Append(Aprime,[aa]);
+	bprime := ZeroMutable([1..Size(Aprime)]);
+	bprime[Size(bprime)] := 1;
+	linrows := [1..Size(bprime)];
+	LB := -IdentityMat(Size(Aprime[1]));
+	Append(Aprime,LB);
+	Append(bprime,Zero([1..Size(LB)]));
+	f := ShallowCopy(b);
+	Append(f,[1]);
+	XFVAL := linprogMax(-f,Aprime,bprime,linrows);
+	return [XFVAL[1],XFVAL[2]];
 end;
 
-Permute_matrix_parallel:=function(B,A) #subfunction
-# sort columns of matrix B in parallel with indices A
+Permute_matrix_parallel_reverse:=function(B,A) #subfunction
+# sort columns of matrix B in parallel with indices A and then reverse columns of B
 	local Bt,Bf,A1;
 	Bt:=TransposedMat(B);
 	Bt:=ShallowCopy(Bt);
 	A1:=ShallowCopy(A);
 	SortParallel(A1,Bt);
+	Bf:=Reversed(Bf);
 	Bf:=TransposedMat(Bt);
 	return [Bf,A1];
 end;
 
 Permute_marginalAndJoin:=function(ncinstance) #subfunction
-####example ncinstance:=[[[3,6]],3,6]; permute column indices of A such that the first 7 indices are [1],..[6],[3,6]
+####example ncinstance:=[[[3,6],[5,6]],3,6]; permute column indices of A such that the first 7 indices are [1],..[6],[3,6],[5,6]
 	local A,numofVar,i;
 	numofVar:=ncinstance[3];
 	A:=[set2int([numofVar])+2^numofVar..set2int([numofVar])+2^(numofVar+1)-2];
@@ -111,4 +112,20 @@ Permute_marginalAndJoin:=function(ncinstance) #subfunction
 		A[set2int(ncinstance[1][i])]:=set2int([numofVar])+set2int(ncinstance[1][i]);
 	od;
 	return A;
+end;
+
+EqualityEliminationinitialize := function(Equal,c,Amatrix,b,ncinstance)
+####example ncinstance:=[[[3,6],[5,6]],3,6];
+	local A, EqualpA, Equalp, Amatrixp,EqualpT, AmatrixpT;
+	A := Permute_marginalAndJoin(ncinstance);
+	EqualpA := Permute_matrix_parallel_reverse(Equal, A);
+	Equalp := EqualpA[1];
+	Amatrixp := Permute_matrix_parallel_reverse(Amatrix, A);
+	EqualpT := TransposedMat(Equalp);
+	EqualpT := ShallowCopy(EqualpT);
+	Append(EqualpT,[-c]);
+	AmatrixpT := TransposedMat(Amatrixp);
+	AmatrixpT := ShallowCopy(AmatrixpT);
+	Append(AmatrixpT,[-b]);
+	return [TransposedMat(EqualpT), TransposedMat(AmatrixpT)];
 end;
