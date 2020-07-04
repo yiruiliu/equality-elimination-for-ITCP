@@ -86,7 +86,7 @@ EqualityEliminationDual := function(A, b)
 	Append(bprime,Zero([1..Size(LB)]));
 	f := ShallowCopy(b);
 	Append(f,[1]);
-	XFVAL := linprogMax(f,Aprime,bprime,linrows);
+	XFVAL := linprogMax(-f,Aprime,bprime,[]);
 	return [XFVAL[1],XFVAL[2]];
 end;
 
@@ -170,7 +170,7 @@ EqualityEliminationMain := function(Equal,c,Amatrix,b,ncinstance)
 			AA1 := AppendColumn(A1, -b1);
 			Equalp_c := [];
 			Amatrixp_b := [];
-			for i in [1..Size(X1)] do
+			for i in [1..Size(AA1)] do
 				if X1[i] > 0 then
 					Append(Equalp_c, [AA1[i]]);
 				else
