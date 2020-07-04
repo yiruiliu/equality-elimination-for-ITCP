@@ -1,4 +1,4 @@
-linprogMax := function(obj,A,b,linrows) ## max(obj*x) given Ax<= b, linrows denotes equality constraints, 
+linprogMax := function(obj,A,b,linrows) ## max(obj*x) given Ax<= b, linrows(linrows didn't work) denotes equality constraints, 
 	local  s, rlist;
 	rlist:=LoadQSLP([],A,b,[],qs_exec);
 	s:=rlist[1];
@@ -79,6 +79,8 @@ EqualityEliminationDual := function(A, b)
 	bprime := ZeroMutable([1..Size(Aprime)]);
 	bprime[Size(bprime)] := 1;
 	linrows := [1..Size(bprime)];
+	Append(Aprime,-Aprime);
+	Append(bprime,-bprime);
 	LB := -IdentityMat(Size(Aprime[1]));
 	Append(Aprime,LB);
 	Append(bprime,Zero([1..Size(LB)]));
