@@ -129,3 +129,63 @@ EqualityEliminationinitialize := function(Equal,c,Amatrix,b,ncinstance)
 	Append(AmatrixpT,[-b]);
 	return [TransposedMat(EqualpT), TransposedMat(AmatrixpT)];
 end;
+
+AppendColumn:=function(A,column)   ##subfunction
+	local AT, A1;
+	AT:=TransposedMat(A);
+	AT:=ShallowCopy(AT);
+	Append(AT,[column]);
+	A1:=TransposedMat(AT);
+	return ShallowCopy(A1);
+end;
+
+EqualityEliminationMain := function(Equal,c,Amatrix,b,ncinstance)
+####example ncinstance:=[[[3,6],[5,6]],3,6];
+	local AllEqual, EA, Equalp_c, Amatrixp_b, FVAL, A1, A1T, b1, XFVAL, X,
+	X1FVAL1, X1, FVAL1, AA1, i, AA1T;
+	AllEqual := [];
+	EA := EqualityEliminationinitialize(Equal,c,Amatrix,b,ncinstance);
+	Equalp_c := EA[1];
+	Amatrixp_b := EA[2];
+	FVAL := 0;
+	Append(AllEqual, Equalp_c);
+	while FVAL = 0 do
+		A1 := EqualityEliminationEE(Equalp_c, Amatrixp_b);
+		A1T := TransposedMat(A1);
+		A1T := ShallowCopy(A1T);
+		b1 := - A1T[Size(A1T)];
+		A1T := A1T{[1..Size(A1T) - 1]};
+		A1 := TransposedMat(A1T);
+		A1 := ShallowCopy(A1);
+		XFVAL := EqualityEliminationDetectfFullDim(A1, b1);
+		X := XFVAL[1];
+		FVAL := XFVAL[2];
+		if FVAL = 0 then
+			X1FVAL1 := EqualityEliminationDual(A1, b1);
+			X1 := X1FVAL1[1];
+			FVAL1 := X1FVAL1[2];
+			AA1 := AppendColumn(A1, -b1);
+			Equalp_c := [];
+			Amatrixp_b := [];
+			for i in [1..Size(X1)] do
+				if X1[i] > 0 then
+					Append(Equalp_c, [AA1[i]]);
+				else
+					Append(Amatrixp_b, [AA1[i]]);
+				fi;
+			od;
+			Append(AllEqual,Equalp_c);
+		fi;
+		
+	od;
+	AA1T := [];
+	A1T := TransposedMat(A1);
+	for i in [1..Size(A1T)] do
+		if Maximum(A1T[i]) = 0 and Minimum(A1T[i]) = 0 then
+		
+		else
+			Append(AA1T,[A1T[i]]);
+		fi;
+	od;
+	AA1 := TransposedMat(AA1T);
+end;
