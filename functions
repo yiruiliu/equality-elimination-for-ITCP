@@ -84,7 +84,7 @@ EqualityEliminationDual := function(A, b)
 	Append(bprime,Zero([1..Size(LB)]));
 	f := ShallowCopy(b);
 	Append(f,[1]);
-	XFVAL := linprogMax(-f,Aprime,bprime,linrows);
+	XFVAL := linprogMax(f,Aprime,bprime,linrows);
 	return [XFVAL[1],XFVAL[2]];
 end;
 
