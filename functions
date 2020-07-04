@@ -95,8 +95,8 @@ Permute_matrix_parallel_reverse:=function(B,A) #subfunction
 	Bt:=ShallowCopy(Bt);
 	A1:=ShallowCopy(A);
 	SortParallel(A1,Bt);
-	Bf:=Reversed(Bf);
-	Bf:=TransposedMat(Bt);
+	Bf:=Reversed(Bt);
+	Bf:=TransposedMat(Bf);
 	return [Bf,A1];
 end;
 
@@ -116,11 +116,12 @@ end;
 
 EqualityEliminationinitialize := function(Equal,c,Amatrix,b,ncinstance)
 ####example ncinstance:=[[[3,6],[5,6]],3,6];
-	local A, EqualpA, Equalp, Amatrixp,EqualpT, AmatrixpT;
+	local A, EqualpA, Equalp, AmatrixpA, Amatrixp,EqualpT, AmatrixpT;
 	A := Permute_marginalAndJoin(ncinstance);
 	EqualpA := Permute_matrix_parallel_reverse(Equal, A);
 	Equalp := EqualpA[1];
-	Amatrixp := Permute_matrix_parallel_reverse(Amatrix, A);
+	AmatrixpA := Permute_matrix_parallel_reverse(Amatrix, A);
+	Amatrixp := AmatrixpA[1];
 	EqualpT := TransposedMat(Equalp);
 	EqualpT := ShallowCopy(EqualpT);
 	Append(EqualpT,[-c]);
