@@ -5,7 +5,7 @@ linprogMax := function(obj,A,b,linrows) ## max(obj*x) given Ax<= b, linrows deno
 	LoadQSLPobj(s, obj);
 	SolveQSLP(s,[]);
 	rlist:=GetQSLPsol_primal(s);
-	return [rlist[3],rlist[5]]; # [max(obj*x), x] 
+	return [rlist[5],rlist[3]]; # [x, max(obj*x)] 
 end;
 
 EqualityEliminationDetectfFullDim := function(A,b)
@@ -159,7 +159,7 @@ EqualityEliminationMain := function(Equal,c,Amatrix,b,ncinstance)
 		A1 := TransposedMat(A1T);
 		A1 := ShallowCopy(A1);
 		XFVAL := EqualityEliminationDetectfFullDim(A1, b1);
-		X := XFVAL[1];
+		#X := XFVAL[1];
 		FVAL := XFVAL[2];
 		if FVAL = 0 then
 			X1FVAL1 := EqualityEliminationDual(A1, b1);
