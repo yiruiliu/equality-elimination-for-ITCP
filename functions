@@ -193,5 +193,5 @@ EqualityEliminationMain := function(Equal,c,Amatrix,b,ncinstance)
 	od;
 	AA1 := TransposedMat(AA1T);
 	# The last N (N denotes the dimension of the projected region) columns of AA1 are [[5,6],[3,6],[6],[5],[4],[3],[2],[1]]
-	return AA1;
+	return [AA1,AllEqual];
 end;
