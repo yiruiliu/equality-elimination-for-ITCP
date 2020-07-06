@@ -5,6 +5,7 @@ linprogMax := function(obj,A,b,linrows) ## max(obj*x) given Ax<= b, linrows(linr
 	LoadQSLPobj(s, obj);
 	SolveQSLP(s,[]);
 	rlist:=GetQSLPsol_primal(s);
+	FlushQSLP(s);
 	return [rlist[5],rlist[3]]; # [x, max(obj*x)] 
 end;
 
