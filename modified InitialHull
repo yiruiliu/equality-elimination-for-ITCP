@@ -1,0 +1,47 @@
+InitialHull := function ( A, b, k, qs_exec )
+    local  rlist, s, vlist, obj, i, hlist, vlistk, nb_lpsolved;
+    nb_lpsolved := 0;
+    rlist := LoadQSLP( [  ], A, b, [  ], qs_exec );
+    s := rlist[1];
+    vlist := [  ];
+    vlistk := [  ];
+    LoadQSLPobj( s, Concatenation( [ 1 ], ZeroMutable( [ 1 .. Size( A ) - 1 ] ) ) );
+    SolveQSLP( s, [  ] );
+    nb_lpsolved := nb_lpsolved + 1;
+    rlist := GetQSLPsol_primal( s );
+    Append( vlist, [ Concatenation( [ 1 ], rlist[5] ) ] );
+    Append( vlistk, [ Concatenation( [ 1 ], rlist[5]{[ 1 .. k ]} ) ] );
+    LoadQSLPobj( s, Concatenation( [ -1 ], ZeroMutable( [ 1 .. Size( A ) - 1 ] ) ) );
+    SolveQSLP( s, [  ] );
+    nb_lpsolved := nb_lpsolved + 1;
+    rlist := GetQSLPsol_primal( s );
+    Append( vlist, [ Concatenation( [ 1 ], rlist[5] ) ] );
+    Append( vlistk, [ Concatenation( [ 1 ], rlist[5]{[ 1 .. k ]} ) ] );
+    while Size( vlist ) < k + 1  do
+        Print("Size(vlist) is ", Size(vlist), "k + 1 is ", k + 1);
+        obj := hyperplane( vlist{[ 1 .. Size( vlist ) ]}{[ 2 .. Size( vlist[1] ) ]}, k );
+        LoadQSLPobj( s, Concatenation( ListRat2Int( obj ), ZeroMutable( [ 1 .. Size( A ) - Size( obj ) ] ) ) );
+        SolveQSLP( s, [  ] );
+        nb_lpsolved := nb_lpsolved + 1;
+        rlist := GetQSLPsol_primal( s );
+        if RankMat( Concatenation( vlistk, [ Concatenation( [ 1 ], rlist[5]{[ 1 .. k ]} ) ] ) ) = Size( vlistk ) + 1
+             then
+            Append( vlistk, [ Concatenation( [ 1 ], rlist[5]{[ 1 .. k ]} ) ] );
+            Append( vlist, [ Concatenation( [ 1 ], rlist[5] ) ] );
+        fi;
+        if not Size( vlist ) < k + 1  then
+            break;
+        fi;
+        LoadQSLPobj( s, Concatenation( - ListRat2Int( obj ), ZeroMutable( [ 1 .. Size( A ) - Size( obj ) ] ) ) );
+        SolveQSLP( s, [  ] );
+        nb_lpsolved := nb_lpsolved + 1;
+        rlist := GetQSLPsol_primal( s );
+        if RankMat( Concatenation( vlistk, [ Concatenation( [ 1 ], rlist[5]{[ 1 .. k ]} ) ] ) ) = Size( vlistk ) + 1
+             then
+            Append( vlistk, [ Concatenation( [ 1 ], rlist[5]{[ 1 .. k ]} ) ] );
+            Append( vlist, [ Concatenation( [ 1 ], rlist[5] ) ] );
+        fi;
+    od;
+    hlist := Inverse( TransposedMat( vlistk ) );
+    return [ s, vlistk, hlist, nb_lpsolved ];
+end;
