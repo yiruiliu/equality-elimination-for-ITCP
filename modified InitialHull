@@ -18,7 +18,7 @@ InitialHull := function ( A, b, k, qs_exec )
     Append( vlist, [ Concatenation( [ 1 ], rlist[5] ) ] );
     Append( vlistk, [ Concatenation( [ 1 ], rlist[5]{[ 1 .. k ]} ) ] );
     while Size( vlist ) < k + 1  do
-        Print("Size(vlist) is ", Size(vlist), "k + 1 is ", k + 1);
+        Display( Concatenation("Size(vlist) = ", String(Size(vlist)), ", \n\t k + 1 = ", String(k + 1)));
         obj := hyperplane( vlist{[ 1 .. Size( vlist ) ]}{[ 2 .. Size( vlist[1] ) ]}, k );
         LoadQSLPobj( s, Concatenation( ListRat2Int( obj ), ZeroMutable( [ 1 .. Size( A ) - Size( obj ) ] ) ) );
         SolveQSLP( s, [  ] );
