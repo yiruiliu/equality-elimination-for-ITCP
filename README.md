@@ -1,7 +1,7 @@
 # equality-elimination-for-ITCP(GAP)
 # Introduction
 
-Foobar is a Python library for dealing with word pluralization.
+- <img src="https://latex.codecogs.com/gif.latex?\Gamma_N " /> 
 
 ## Installation
 
