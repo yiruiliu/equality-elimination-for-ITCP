@@ -1,7 +1,7 @@
 # equality-elimination-for-ITCP(GAP)
 # Introduction
 
-https://latex.codecogs.com/gif.latex?\text{Proj}_{\boldsymbol{h}_p}(\Gamma_N\cap&space;\mathcal{L}) with
+![equation](http://latex.codecogs.com/gif.latex?O_t%3D%5Ctext%20%7B%20Onset%20event%20at%20time%20bin%20%7D%20t) with
  $\text{S}_1(N) = \sum_{p=1}^N \text{E}(p)$
 ## Installation
 
