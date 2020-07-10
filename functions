@@ -251,7 +251,8 @@ EqualityEliminationFromNet_indep := function(ncinstance,listofedge)
 	Equal := ShOB1{linrows};
 	diff := Difference([1..Size(ShOB1)],linrows);
 	Amatrix := ShOB1{diff};
-	c := ZeroMutable([1..length(linrows)]);
+	c := ZeroMutable([1..Length(linrows)]);
 	b := ShOB2{diff};
-	A1AllEqual := EqualityEliminationMain(Equal,c,Amatrix,b,listofedge);
+	A1AllEqual := EqualityEliminationMain(Equal,c,Amatrix,b,ncinstance[3],listofedge);
+	return A1AllEqual;
 end;
