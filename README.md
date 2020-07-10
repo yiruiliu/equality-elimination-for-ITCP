@@ -1,8 +1,8 @@
 # equality-elimination-for-ITCP(GAP)
 # Introduction
 
-![equation](https://latex.codecogs.com/svg.latex?%5Ctext%7BProj%7D_%7B%5Cboldsymbol%7Bh%7D_p%7D%28%5CGamma_N%5Ccap%20%5Cmathcal%7BL%7D%29) with
- $\text{S}_1(N) = \sum_{p=1}^N \text{E}(p)$
+![equation](https://latex.codecogs.com/svg.latex?%5Ctext%7BProj%7D_%7B%5Cboldsymbol%7Bh%7D_p%7D%28%5CGamma_N%5Ccap%20%5Cmathcal%7BL%7D_%7B%5Cmathsf%7BA%7D%7D%29) with
+
 ## Installation
 
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
