@@ -103,36 +103,24 @@ Permute_matrix_parallel_reverse:=function(B,A) #subfunction
 	return [Bf,A1];
 end;
 
-Permute_marginalAndJoin:=function(ncinstance) #subfunction
-####example ncinstance:=[[[3,6],[5,6]],3,6]; permute column indices of A such that the first 7 indices are [1],..[6],[3,6],[5,6]
-	local A,numofVar,i;
-	numofVar:=ncinstance[3];
-	A:=[set2int([numofVar])+2^numofVar..set2int([numofVar])+2^(numofVar+1)-2];
-	for i in [1..numofVar] do
-		A[set2int([i])]:=set2int([i]);
-	od;
-	for i in [1..Size(ncinstance[1])] do
-		A[set2int(ncinstance[1][i])]:=set2int([numofVar])+set2int(ncinstance[1][i]);
-	od;
-	return A;
-end;
 
-Permute_marginalAndJoin:=function(ncinstance) #subfunction
-####example ncinstance:=[[[3,6],[5,6]],3,6]; permute column indices of A such that the first 7 indices are [1],..[6],[3,6],[5,6]
-	local A,numofVar,i;
-	numofVar:=ncinstance[3];
-	A:=[set2int([numofVar])+2^numofVar..set2int([numofVar])+2^(numofVar+1)-2];
 
-	for i in [1..Size(ncinstance[1])] do
-		A[set2int(ncinstance[1][i])]:=i;
+Permute_marginalAndJoin:=function(numofVar,listofedge) #subfunction
+####example listofedge:=[[1],[2],[3],[4],[5],[6],[3,6],[5,6]]; permute column indices of A such that the first 7 indices are [1],..[6],[3,6],[5,6]
+	local A,Len_LOE,i;
+	Len_LOE:=Size(listofedge);
+	A:=[Len_LOE+1..Len_LOE+2^(numofVar)-1];
+
+	for i in [1..Len_LOE] do
+		A[set2int(listofedge[i])]:=i;
 	od;
 	return A;
 end;
 
-EqualityEliminationinitialize := function(Equal,c,Amatrix,b,ncinstance)
-####example ncinstance:=[[[3,6],[5,6]],3,6];
+EqualityEliminationinitialize := function(Equal,c,Amatrix,b,numofVar,listofedge)
+####example listofedge:=[[1],[2],[3],[4],[5],[6],[3,6],[5,6]]; numofVar := 6;
 	local A, EqualpA, Equalp, AmatrixpA, Amatrixp,EqualpT, AmatrixpT;
-	A := Permute_marginalAndJoin(ncinstance);
+	A := Permute_marginalAndJoin(numofVar,listofedge);
 	EqualpA := Permute_matrix_parallel_reverse(Equal, A);
 	Equalp := EqualpA[1];
 	AmatrixpA := Permute_matrix_parallel_reverse(Amatrix, A);
@@ -155,12 +143,12 @@ AppendColumn:=function(A,column)   ##subfunction
 	return ShallowCopy(A1);
 end;
 
-EqualityEliminationMain := function(Equal,c,Amatrix,b,ncinstance)
-####example ncinstance:=[[[3,6],[5,6]],3,6];
+EqualityEliminationMain := function(Equal,c,Amatrix,b,numofVar,listofedge)
+####example  listofedge:=[[1],[2],[3],[4],[5],[6],[3,6],[5,6]]; numofVar := 6;
 	local AllEqual, EA, Equalp_c, Amatrixp_b, FVAL, A1, A1T, b1, XFVAL, X,
 	X1FVAL1, X1, FVAL1, AA1, i, AA1T;
 	AllEqual := [];
-	EA := EqualityEliminationinitialize(Equal,c,Amatrix,b,ncinstance);
+	EA := EqualityEliminationinitialize(Equal,c,Amatrix,b,numofVar,listofedge);
 	Equalp_c := EA[1];
 	Amatrixp_b := EA[2];
 	FVAL := 0;
