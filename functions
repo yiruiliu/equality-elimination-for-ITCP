@@ -117,6 +117,18 @@ Permute_marginalAndJoin:=function(ncinstance) #subfunction
 	return A;
 end;
 
+Permute_marginalAndJoin:=function(ncinstance) #subfunction
+####example ncinstance:=[[[3,6],[5,6]],3,6]; permute column indices of A such that the first 7 indices are [1],..[6],[3,6],[5,6]
+	local A,numofVar,i;
+	numofVar:=ncinstance[3];
+	A:=[set2int([numofVar])+2^numofVar..set2int([numofVar])+2^(numofVar+1)-2];
+
+	for i in [1..Size(ncinstance[1])] do
+		A[set2int(ncinstance[1][i])]:=i;
+	od;
+	return A;
+end;
+
 EqualityEliminationinitialize := function(Equal,c,Amatrix,b,ncinstance)
 ####example ncinstance:=[[[3,6],[5,6]],3,6];
 	local A, EqualpA, Equalp, AmatrixpA, Amatrixp,EqualpT, AmatrixpT;
