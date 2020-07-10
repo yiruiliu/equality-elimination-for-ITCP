@@ -1,4 +1,4 @@
-# equality-elimination-for-ITCP
+# equality-elimination-for-ITCP(GAP)
 # Foobar
 
 Foobar is a Python library for dealing with word pluralization.
