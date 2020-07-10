@@ -1,7 +1,7 @@
 # equality-elimination-for-ITCP(GAP)
 # Introduction
 
-- <img src="https://latex.codecogs.com/gif.latex?\Gamma_N " /> with
+- <img src="https://latex.codecogs.com/gif.latex?\text{Proj}_{\boldsymbol{h}}\Gamma_N " /> with
 
 ## Installation
 
