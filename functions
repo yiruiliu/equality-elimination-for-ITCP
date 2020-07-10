@@ -143,6 +143,52 @@ AppendColumn:=function(A,column)   ##subfunction
 	return ShallowCopy(A1);
 end;
 
+AddconstraintsTopAndBottom_indep:=function(ncinstance) ##subfunction
+	local linrows,i,ShOB1,con,j,conlin;
+	ShOB1 := GenShannonUnBounded( ncinstance[3] );
+	i := Size( ShOB1[1] ) + 1;
+	linrows := [  ];
+	for con  in ncinstance[1]  do     #### H(Out(t),In(t))=H(In(t))
+		conlin := ZeroMutable( [ 1 .. 2 ^ ncinstance[3] - 1 ] );
+		conlin[set2int( con[1] )] := 1;
+		conlin[set2int( con[2] )] := -1;
+		Append( ShOB1[1], [ conlin ] );
+		Append( ShOB1[2], [ 0 ] );
+		Append( linrows, [ i ] );
+		i := i + 1;
+	od;
+	conlin := ZeroMutable( [ 1 .. 2 ^ ncinstance[3] - 1 ] );
+	if ncinstance[2]>1 then
+		for j  in [ 1 .. ncinstance[2] ]  do    #### H(s1,s2,..,sj)=H(s1)+H(s2)+,...,+H(sj)
+			conlin[set2int( [ j ] )] := 1;
+		od;
+		conlin[set2int( [ 1 .. ncinstance[2] ] )] := -1;
+		Append( ShOB1[1], [ conlin ] );
+		Append( ShOB1[2], [ 0 ] );
+		Append( linrows, [ i ] );
+		i := i + 1;
+	fi;
+	return [ShOB1[1],ShOB1[2],linrows];
+end;
+
+AddconstraintsTopAndBottom_noindep:=function(ncinstance) ##subfunction
+	local linrows,i,ShOB1,con,j,conlin;
+	ShOB1 := GenShannonUnBounded( ncinstance[3] );
+	i := Size( ShOB1[1] ) + 1;
+	linrows := [  ];
+	for con  in ncinstance[1]  do     #### H(Out(t),In(t))=H(In(t))
+		conlin := ZeroMutable( [ 1 .. 2 ^ ncinstance[3] - 1 ] );
+		conlin[set2int( con[1] )] := 1;
+		conlin[set2int( con[2] )] := -1;
+		Append( ShOB1[1], [ conlin ] );
+		Append( ShOB1[2], [ 0 ] );
+		Append( linrows, [ i ] );
+		i := i + 1;
+	od;
+	conlin := ZeroMutable( [ 1 .. 2 ^ ncinstance[3] - 1 ] );
+	return [ShOB1[1],ShOB1[2],linrows];
+end;
+
 EqualityEliminationMain := function(Equal,c,Amatrix,b,numofVar,listofedge)
 ####example  listofedge:=[[1],[2],[3],[4],[5],[6],[3,6],[5,6]]; numofVar := 6;
 	local AllEqual, EA, Equalp_c, Amatrixp_b, FVAL, A1, A1T, b1, XFVAL, X,
@@ -194,4 +240,18 @@ EqualityEliminationMain := function(Equal,c,Amatrix,b,numofVar,listofedge)
 	AA1 := TransposedMat(AA1T);
 	# The last N (N denotes the dimension of the projected region) columns of AA1 are [[5,6],[3,6],[6],[5],[4],[3],[2],[1]]
 	return [AA1,AllEqual];
+end;
+
+EqualityEliminationFromNet_indep := function(ncinstance,listofedge)
+	local SHL, ShOB1,ShOB2,linrows,Equal,diff,Amatrix,c,b,A1AllEqual;
+	SHL := AddconstraintsTopAndBottom_indep(ncinstance);
+	ShOB1 := SHL[1];
+	ShOB2 := SHL[2];
+	linrows := SHL[3];
+	Equal := ShOB1{linrows};
+	diff := Difference([1..Size(ShOB1)],linrows);
+	Amatrix := ShOB1{diff};
+	c := ZeroMutable([1..length(linrows)]);
+	b := ShOB2{diff};
+	A1AllEqual := EqualityEliminationMain(Equal,c,Amatrix,b,listofedge);
 end;
