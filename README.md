@@ -1,7 +1,7 @@
 # equality-elimination-for-ITCP(GAP)
 # Introduction
 
-![equation](https://latex.codecogs.com/pdf.latex?%5Ctext%7BProj%7D_%7B%5Cboldsymbol%7Bh%7D_p%7D%28%5CGamma_N%5Ccap%20%5Cmathcal%7BL%7D%29) with
+![equation](https://latex.codecogs.com/svg.latex?%5Ctext%7BProj%7D_%7B%5Cboldsymbol%7Bh%7D_p%7D%28%5CGamma_N%5Ccap%20%5Cmathcal%7BL%7D%29) with
  $\text{S}_1(N) = \sum_{p=1}^N \text{E}(p)$
 ## Installation
 
