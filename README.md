@@ -8,6 +8,7 @@ The function symCHM of ITCP treats the problem ![equation](https://latex.codecog
 
 ```GAP
 ncinstance := [[[[3,4],[3,4,5]],[[2,3],[2,3,4]]],3,6];
+listofedge := [ [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ], [ 6 ], [ 4, 5 ], [ 3, 6 ], [ 1, 2 ], [ 2, 3, 4 ]];
 ```
 
 ## Contributing
