@@ -20,5 +20,8 @@ b_I := Ans[2];
 E_p := Ans[3]
 c_p := Ans[4];
 indepedge := Ans[5];
+# A_I, b_I is output 1) 
+# E_p, c_p is output 2)
+# indepedge := [[ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ], [ 6 ], [ 4, 5 ], [ 3, 6 ], 0, 0]; is output 3) with 0 indicates the dependent variables that are not in  h_I\cap h_p 
 ```
 
