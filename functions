@@ -193,7 +193,7 @@ end;
 EqualityEliminationMain := function(Equal,c,Amatrix,b,numofVar,listofedge)
 ####example  listofedge:=[[1],[2],[3],[4],[5],[6],[3,6],[5,6]]; numofVar := 6;
 	local AllEqual, EA, Equalp_c, Amatrixp_b, FVAL, A1, A1T, b1, XFVAL, X,
-	X1FVAL1, X1, FVAL1, AA1, i, AA1T;
+	X1FVAL1, X1, FVAL1, AA2, i, AA2T, RAllEqual, EqualforProj, c1, j, eq,indepedge;
 	AllEqual := [];
 	EA := EqualityEliminationinitialize(Equal,c,Amatrix,b,numofVar,listofedge);
 	Equalp_c := EA[1];
@@ -229,18 +229,36 @@ EqualityEliminationMain := function(Equal,c,Amatrix,b,numofVar,listofedge)
 		fi;
 		
 	od;
-	AA1T := [];
+	RAllEqual := RREF(AllEqual);
+	EqualforProj := [];
+	indepedge := ShallowCopy(listofedge);
+	c1 := [];
+	for i in [1..Size(RALLEqual)] do
+		for j in [1..Size(RAllEqual[1])] do
+			if RAllEqual[i][j] = 1 then
+				if j > Size(RAllEqual[1]) - Length(listofedge) - 1 then
+					eq := ShallowCopy(RAllEqual[i]{[Size(RAllEqual[1]) - Length(listofedge)..Size(RAllEqual[1])-1]});
+					Append(EqualforProj,[Reversed(eq)]);
+					Append(c1,[RAllEqual[i][Size(RAllEqual[1])]]);
+					indepedge[Size(RAllEqual[1]) - j] := [0];
+				fi;
+				break;
+			fi;
+		od;
+	od;
+	AA2T := [];
 	A1T := TransposedMat(A1);
 	for i in [1..Size(A1T)] do
 		if Maximum(A1T[i]) = 0 and Minimum(A1T[i]) = 0 then
 		
 		else
-			Append(AA1T,[A1T[i]]);
+			eq := ShallowCopy(A1T[i]);
+			Append(AA2T,[Reversed(eq)]);
 		fi;
 	od;
-	AA1 := TransposedMat(AA1T);
+	AA2 := TransposedMat(AA2T);
 	# The last N (N denotes the dimension of the projected region) columns of AA1 are [[5,6],[3,6],[6],[5],[4],[3],[2],[1]]
-	return [AA1,AllEqual];
+	return [AA2,b1,EqualforProj,c1,indepedge];
 end;
 
 EqualityEliminationFromNet_indep := function(ncinstance,listofedge)
