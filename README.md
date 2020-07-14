@@ -7,6 +7,7 @@ Let
 
 ![equation](https://latex.codecogs.com/svg.latex?%5Cbegin%7Bcases%7D%20%5Cmathbb%7BA%7D%5Cboldsymbol%7Bh%7D%5Cleq%20%5Cboldsymbol%7B0%7D%5C%5C%20%5Cmathbb%7BB%7D%5Cboldsymbol%7Bh%7D%20%3D%20%5Cboldsymbol%7B0%7D%20%5Cend%7Bcases%7D)
 
+be ![equation](https://latex.codecogs.com/gif.latex?%5CGamma_N%5Ccap%20%5Cmathcal%7BL%7D_%7B%5Cmathsf%7BA%7D%7D)
 ## Usage
 
 ```GAP
