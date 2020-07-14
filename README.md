@@ -9,16 +9,16 @@ Denoted as ![equation](https://latex.codecogs.com/svg.latex?%5Cinline%20%5Cmathb
 
 where ![equation](https://latex.codecogs.com/svg.latex?%5Cinline%20%5Cmathbb%7BA%7D_I%5Cboldsymbol%7Bh%7D_I%5Cleq%20%5Cboldsymbol%7B0%7D) is an equality free cone.
 ## Usage
-
+Our GAP version equality elimination function takes 1) a network and 2) a list of indices h_p indicating the projected dimensions as inputs and ouputs 1) the coefficient A_I, b_I of the equality free cone A_Ih_I<=b_I, 2) the coefficient E_p, c_p  of equalities among h_p, E_ph_p = c_p, 3) the intersection of independent variable h_I and h_p.  
 ```GAP
 #example
 ncinstance := [ [ [ [ 3, 4 ], [ 3, 4, 5 ] ], [ [ 2, 3 ], [ 2, 3, 4 ] ] ], 3, 6 ];
-listofedge := [ [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ], [ 6 ], [ 4, 5 ], [ 3, 6 ], [ 1, 2 ], [ 2, 3, 4 ] ];
+h_p := [ [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ], [ 6 ], [ 4, 5 ], [ 3, 6 ], [ 1, 2 ], [ 2, 3, 4 ] ];
 Ans := EqualityEliminationFromNet_indep(ncinstance,listofedge);
-A := Ans[1];
-b := Ans[2];
-E := Ans[3]
-c := Ans[4];
+A_I := Ans[1];
+b_I := Ans[2];
+E_p := Ans[3]
+c_p := Ans[4];
 indepedge := Ans[5];
 ```
 
