@@ -10,6 +10,12 @@ The function symCHM of ITCP treats the problem ![equation](https://latex.codecog
 #example
 ncinstance := [ [ [ [ 3, 4 ], [ 3, 4, 5 ] ], [ [ 2, 3 ], [ 2, 3, 4 ] ] ], 3, 6 ];
 listofedge := [ [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ], [ 6 ], [ 4, 5 ], [ 3, 6 ], [ 1, 2 ], [ 2, 3, 4 ] ];
+Ans := EqualityEliminationFromNet_indep(ncinstance,listofedge);
+AA2 := Ans[1];
+b1 := Ans[2];
+EqualforProj := Ans[3]
+c1 := Ans[4];
+indepedge := Ans[5];
 ```
 
 ## Contributing
