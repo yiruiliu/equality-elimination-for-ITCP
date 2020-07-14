@@ -14,7 +14,7 @@ Our GAP version equality elimination function takes 1) a network and 2) a list o
 #example
 ncinstance := [ [ [ [ 3, 4 ], [ 3, 4, 5 ] ], [ [ 2, 3 ], [ 2, 3, 4 ] ] ], 3, 6 ];
 h_p := [ [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ], [ 6 ], [ 4, 5 ], [ 3, 6 ], [ 1, 2 ], [ 2, 3, 4 ] ];
-Ans := EqualityEliminationFromNet_indep(ncinstance,listofedge);
+Ans := EqualityEliminationFromNet_indep(ncinstance,h_p);
 A_I := Ans[1];
 b_I := Ans[2];
 E_p := Ans[3]
@@ -22,6 +22,6 @@ c_p := Ans[4];
 indepedge := Ans[5];
 # A_I, b_I is output 1) 
 # E_p, c_p is output 2)
-# indepedge := [[ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ], [ 6 ], [ 4, 5 ], [ 3, 6 ], 0, 0]; is output 3) with 0 indicates the dependent variables that are not in  h_I\cap h_p 
+# indepedge := [[ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ], [ 6 ], [ 4, 5 ], [ 3, 6 ], [0], [0] ]; is output 3) with [0] indicates the dependent variables that are not in  h_I\cap h_p 
 ```
 
