@@ -233,7 +233,7 @@ EqualityEliminationMain := function(Equal,c,Amatrix,b,numofVar,listofedge)
 	EqualforProj := [];
 	indepedge := ShallowCopy(listofedge);
 	c1 := [];
-	for i in [1..Size(RALLEqual)] do
+	for i in [1..Size(RAllEqual)] do
 		for j in [1..Size(RAllEqual[1])] do
 			if RAllEqual[i][j] = 1 then
 				if j > Size(RAllEqual[1]) - Length(listofedge) - 1 then
@@ -257,7 +257,6 @@ EqualityEliminationMain := function(Equal,c,Amatrix,b,numofVar,listofedge)
 		fi;
 	od;
 	AA2 := TransposedMat(AA2T);
-	# The last N (N denotes the dimension of the projected region) columns of AA1 are [[5,6],[3,6],[6],[5],[4],[3],[2],[1]]
 	return [AA2,b1,EqualforProj,c1,indepedge];
 end;
 
